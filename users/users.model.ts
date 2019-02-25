@@ -1,21 +1,28 @@
-const users = [
-    {id: '1', name: 'Peter parckinson', email: 'peter@gmail.com'},
-    {id: '2', name: 'Bruce bane', email: 'bruce@gmail.com'}
-]
+import * as mongoose from 'mongoose';
 
-export class User {
-    static findAll(): Promise<any[]>{
-        return Promise.resolve(users);
-    }
-
-    static findById(id: string): Promise<any>{
-        return new Promise(resolve => {
-            const filtered = users.filter(user => user.id === id);
-            let user = undefined;
-            if(filtered.length > 0){
-                let user = filtered[0];
-            }
-            resolve(user);
-        })
-    } 
+interface User extends mongoose.Document{
+    name: string,
+    email: string,
+    password: string
 }
+
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    password:{
+        type: String,
+        required: true,
+        select: false
+    }
+});
+
+const User = mongoose.model<User>('User', userSchema);
+
+export{ User }

@@ -12,7 +12,6 @@ router.get('/', (req, res, next) => {
         .catch(next);
 });
 
-
 router.get('/:id', (req, res, next) => {
     User.findById(req.params.id)
         .then(render(res, next))
@@ -50,10 +49,10 @@ router.patch('/:id', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-    User.deleteOne({ _id: req.params.id })
+    User.findOneAndDelete({ _id: req.params.id })
         .then(result => {
-            if (result.n)
-                res.status(204);
+            if (result)
+                res.status(204).json(result);
             else
                 throw new httpErrors.NotFound('The thing you were looking for was not found');
             return next();

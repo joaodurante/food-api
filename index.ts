@@ -1,5 +1,4 @@
 import { Server } from './server/server';
-import { errorHandler } from './common/error.handler';
 
 const server = new Server();
 
@@ -11,6 +10,5 @@ server.bootstrap()
         console.error(error);
         process.exit(1);
     });
-
 
 export { server };

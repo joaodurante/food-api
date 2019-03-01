@@ -10,19 +10,13 @@ export const errorHandler = (err, req, res, next) => {
 
         case 'ValidationError':
             err.statusCode = 400;
-
-            for (let i in err.errors)
-                messages.push(err.errors[i].message);
             break;
-
-        default:
-            err.statusCode = 500;
     }
 
     return res.status(err.statusCode)
         .json({
-            name: err.name,
             status: err.statusCode,
-            messages: messages
+            name: err.name,
+            messages: err.message
         });
 }

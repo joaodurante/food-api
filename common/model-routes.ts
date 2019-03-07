@@ -3,9 +3,19 @@ import * as httpErrors from 'httperrors';
 import { Common } from './common';
 
 export class ModelRoutes extends Common {
-    constructor(private model) {
+    model: mongoose.Model<any>;
+    basePath: string;
+
+    constructor(model) {
         super();
         this.model = model;
+        this.basePath = `/${this.model.collection.name}`;
+    }
+
+    envelope(document: any): any{
+        let resource = Object.assign({_links:{}}, document.toJSON());
+        resource._links.self = `${this.basePath}/${resource._id}`;
+        return resource;
     }
 
     validateId = (req, res, next) => {
@@ -17,7 +27,7 @@ export class ModelRoutes extends Common {
 
     findAll = (req, res, next) => {
         this.model.find()
-            .then(this.render(res, next))
+            .then(this.renderAll(res, next))
             .catch(next);
     }
 
@@ -57,7 +67,8 @@ export class ModelRoutes extends Common {
     }
 
     removePassword = (document) => {
-        document.password = undefined;
+        if(document.password)
+            document.password = undefined;
         return document;
     }
 }

@@ -1,24 +1,11 @@
-import * as httpErrors from 'httperrors';
 import * as express from 'express';
 import { User } from './users-model';
-import { ModelRoutes } from '../common/model-routes';
+import { UsersRoutes } from './user-routes';
 
 const router = express.Router();
-const mRoutes = new ModelRoutes(User); /* Classe que contém as operações das rotas (findAll, insert, etc) */
+const mRoutes = new UsersRoutes(User);
 
-const findByEmail = async (req, res, next) => {
-    if (req.query.email) {
-        let document = await User.findByEmail(req.query.email)
-        if (document)
-            res.json(document);
-        else 
-            throw new httpErrors.NotFound('The thing you were looking for was not found');
-        return next();
-    }else
-        next();
-}
-
-router.get('/', [findByEmail, mRoutes.findAll]);
+router.get('/', [mRoutes.findByEmail, mRoutes.findAll]);
 router.get('/:id', [mRoutes.validateId, mRoutes.findOne]);
 router.post('/', mRoutes.insert);
 router.put('/:id', [mRoutes.validateId, mRoutes.findAndReplace]);

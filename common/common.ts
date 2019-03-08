@@ -14,20 +14,24 @@ class Common{
         }
     }
 
-    renderAll(res: express.Response, next: express.NextFunction){
+    renderAll(res: express.Response, next: express.NextFunction, options: any = {}){
         return (documents => {
             if(documents){
                 documents.forEach((document, index, array) => {
                     array[index] = this.envelope(document);
                 })
-                res.json(documents);
+                res.json(this.envelopeAll(documents, options));
             }else
-                return res.json([]);
+                return res.json(this.envelopeAll([], options));
         })
     }
 
     envelope(document: any): any{
         return document;
+    }
+
+    envelopeAll(documents: any[], options: any = {}): any{
+        return documents;
     }
 }
 

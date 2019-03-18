@@ -10,7 +10,7 @@ class Common{
             } else {
                 throw new httpErrors.NotFound('The thing you were looking for was not found');
             }
-            return next();
+            return next(false);
         }
     }
 
@@ -23,6 +23,7 @@ class Common{
                 res.json(this.envelopeAll(documents, options));
             }else
                 return res.json(this.envelopeAll([], options));
+            return next(false);
         })
     }
 

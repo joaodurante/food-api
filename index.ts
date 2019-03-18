@@ -1,7 +1,6 @@
 import { Server } from './server/server';
 
 const server = new Server();
-
 server.bootstrap()
     .then(server => {
         console.log(`Server is listening on port: ${server.app.get('port')}`);
@@ -10,5 +9,5 @@ server.bootstrap()
         console.error(error);
         process.exit(1);
     });
-
+    
 export { server };

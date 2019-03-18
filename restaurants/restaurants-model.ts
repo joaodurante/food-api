@@ -30,6 +30,7 @@ const menuSchema = new mongoose.Schema({
 const restSchema = new mongoose.Schema({
     name: {
         type: String,
+        unique: true,
         required: true,
         maxlength: 50,
         minlength: 3

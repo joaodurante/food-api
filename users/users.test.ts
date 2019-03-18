@@ -124,4 +124,4 @@ test('delete /users/xxx - NOT FOUND', async () => {
     }catch(e){
         expect(e.status).toBe(404);
     }
-})
+});

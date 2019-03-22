@@ -1,6 +1,7 @@
 import * as httpErrors from 'httperrors';
 import { User } from './users-model';
 import { ModelRoutes } from '../common/model-routes';
+import { authenticate } from '../security/auth-handler';
 
 export class UsersRoutes extends ModelRoutes{
     constructor(model){
@@ -15,5 +16,9 @@ export class UsersRoutes extends ModelRoutes{
         }else{
             next();
         }
+    }
+
+    authenticate = (req, res, next) => {
+        authenticate(req, res, next);
     }
 }

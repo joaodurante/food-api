@@ -41,7 +41,7 @@ export class ModelRoutes extends Common {
 
     validateId = (req, res, next) => {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            next(httpErrors.NotFound('Document was not found'));
+            next(new httpErrors.NotFound('Document was not found'));
         } else
             next();
     }

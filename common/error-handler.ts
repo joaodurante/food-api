@@ -15,6 +15,7 @@ export const errorHandler = (err, req, res, next) => {
     const messages: any[] = [];
     for(let i in err.errors)
         messages.push({message: err.errors[i].message});
+    messages.push({message: err.message});
 
     return res.status(err.statusCode)
         .json({

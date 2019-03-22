@@ -69,6 +69,43 @@ test('post /user - DUPLICATE', async () => {
     }
 });
 
+test('post /user/authenticate', async () => {
+    try{
+        const password = '123';
+        let userResponse = await request(address).post('/users').send({
+            name: 'UserToken',
+            email: 'usertoken@gmail.com',
+            password: password
+        });
+
+        let tokenResponse = await request(address).post('/users/authenticate').send({
+            email: userResponse.body.email,
+            password: password
+        });
+        expect(tokenResponse.status).toBe(200);
+        expect(tokenResponse.body.accessToken).toBeDefined();
+    }catch(e){
+        fail(e);
+    }
+});
+
+test('post /user/authenticate - WRONG', async () => {
+    try{
+        let userResponse = await request(address).post('/users').send({
+            name: 'UserTokenWrong',
+            email: 'usertokenwrong@gmail.com',
+            password: '123'
+        });
+
+        let tokenResponse = await request(address).post('/users/authenticate').send({
+            email: userResponse.body.email,
+            password: '321'
+        });
+    }catch(e){
+        expect(e.status).toBe(403);
+    }
+});
+
 test('patch /users/:id', async () => {
     try {
         let postResponse = await request(address).post('/users').send({

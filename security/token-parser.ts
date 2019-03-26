@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import { User } from '../users/users-model';
 import { environment } from '../common/environment';
+import * as express from 'express';
 
 const tokenParser = (req, res, next) => {
     const token = extractToken(req);
@@ -26,9 +27,8 @@ const applyBearer = (req, next): (error, decoded) => void => {
     return (error, decoded) => {
         if(decoded){
             User.findByEmail(decoded.sub).then(user => {
-                if(user){
+                if(user)
                     req.authenticated = user;
-                }
                 next();
             }).catch(next);
         }else{

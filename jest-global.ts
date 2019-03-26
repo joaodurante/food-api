@@ -13,9 +13,10 @@ const beforeTests = async () => {
         environment.server.port = process.env.SERVER_PORT || 3001;
         server = new Server();
         await server.bootstrap();
-        User.deleteMany({}).exec();
+        await User.deleteMany({}).exec();
         Review.deleteMany({}).exec();
         Restaurant.deleteMany({}).exec();
+        createAdmin();
     } catch (err) {
         console.log(err);
     }
@@ -23,6 +24,15 @@ const beforeTests = async () => {
 
 const afterTests = async () => {
     return server.shutdown();
+}
+
+const createAdmin = () => {
+    let admin = new User();
+        admin.name = 'admin';
+        admin.email = 'admin@gmail.com';
+        admin.password = '123';
+        admin.profiles = ['admin', 'user'];
+        return admin.save();
 }
 
 beforeTests()

@@ -12,6 +12,9 @@ export const environment = {
     security:{
         saltRounds: process.env.SALT_ROUNDS || 10,
         apiSecret: process.env.API_SECRET || 'food-api-secret',
+        enableHTTPS: process.env.ENABLE_HTTPS || false,
+        certificate: process.env.CERT_FILE || './security/keys/cert.pem',
+        key: process.env.CERT_KEY_FILE || './security/keys/key.pem'
     },
     common:{
         name: 'food-api'

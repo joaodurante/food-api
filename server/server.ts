@@ -1,8 +1,10 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as mongoose from 'mongoose';
+import * as https from 'https';
+import * as fs from 'fs';
 import { environment } from '../common/environment';
-import { registerRoutes } from './routes';
+import { registerRoutes } from './init-routes';
 import { tokenParser } from '../security/token-parser';
 
 export class Server {
@@ -16,15 +18,20 @@ export class Server {
         return new Promise((resolve, reject) => {
             try {
                 this.app = express();
-                this.app.set('port', environment.server.port);
                 this.app.use(bodyParser.urlencoded({ extended: true }));
                 this.app.use(bodyParser.json());
                 this.app.use(tokenParser);
                 registerRoutes(this.app); // registra as rotas e os errorHandlers
 
-                this.connection = this.app.listen(this.app.get('port'), () => {
+                let options: https.ServerOptions = {
+                    cert: fs.readFileSync(environment.security.key),
+                    key: fs.readFileSync(environment.security.certificate)
+                };
+
+                this.connection = this.app.listen(environment.server.port, () => {
                     resolve();
                 });
+
                 
             } catch (err) {
                 reject(err);

@@ -1,10 +1,13 @@
 import { User } from './users/users-model';
+import {Request} from 'express';
 
 /*
  * Insere a propriedade 'authenticated' no request
 */
-declare module 'express' {
-    export interface Request {
+declare global {
+    namespace Express {
+      interface Request {
         authenticated: User
+      }
     }
-}
+  }

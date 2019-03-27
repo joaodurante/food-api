@@ -1,11 +1,11 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as mongoose from 'mongoose';
-import * as https from 'https';
-import * as fs from 'fs';
+import * as morgan from 'morgan';
 import { environment } from '../common/environment';
 import { registerRoutes } from './init-routes';
 import { tokenParser } from '../security/token-parser';
+import { defaultLogger, errorLogger } from '../common/logger';
 
 export class Server {
     app: express.Express;
@@ -21,12 +21,11 @@ export class Server {
                 this.app.use(bodyParser.urlencoded({ extended: true }));
                 this.app.use(bodyParser.json());
                 this.app.use(tokenParser);
-                registerRoutes(this.app); // registra as rotas e os errorHandlers
 
-                let options: https.ServerOptions = {
-                    cert: fs.readFileSync(environment.security.key),
-                    key: fs.readFileSync(environment.security.certificate)
-                };
+                this.app.use(defaultLogger);
+                this.app.use(errorLogger);
+                
+                registerRoutes(this.app); // registra as rotas e os errorHandlers
 
                 this.connection = this.app.listen(environment.server.port, () => {
                     resolve();

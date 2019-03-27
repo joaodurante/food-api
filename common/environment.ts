@@ -18,5 +18,9 @@ export const environment = {
     },
     common:{
         name: 'food-api'
+    },
+    log: {
+        name: 'food-api-logger',
+        level: process.env.LOG_LEVEL || 'debug'
     }
 }

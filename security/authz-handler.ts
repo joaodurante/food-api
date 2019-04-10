@@ -16,13 +16,13 @@ const authorize = (...profiles: string[]) => {
 
 const authorizeSelf = (...profiles: string[]) => {
     return (req, res, next) => {
-        if(req.authenticated !== undefined){
-            if(req.authenticated._id.equals(req.params.id) || req.authenticated.hasAny(...profiles))
-                next();
-            else
-                log(`User ${req.authenticated._id} is not authorized with profiles [${req.authenticated.profiles}]. Required profiles ${[profiles]}`);
-        }
-        next(new httpErrors.Forbidden('Permission denied'));
+        if(req.authenticated !== undefined && (req.authenticated._id.equals(req.params.id) || req.authenticated.hasAny(...profiles))){
+            log(`User ${req.authenticated._id} is authorized with profiles [${req.authenticated.profiles}].`);
+            next();
+        }else{
+            log(`User ${req.authenticated._id} is not authorized with profiles [${req.authenticated.profiles}]. Required profiles ${[profiles]}`);
+            next(new httpErrors.Forbidden('Permission denied'));
+        }  
     }
 }
 

@@ -6,47 +6,47 @@ const address = (<any>global)._address;
 const auth = (<any>global)._auth;
 
 test('authenticate', async () => {
-    try{
+    try {
         let responsePost = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserAuthenticate',
                 email: 'users_authenticate@gmail.com',
                 password: '123'
             });
-        
-            let responseAuth = await request(address)
-                .post('/users/authenticate')
-                .send({
-                    email: responsePost.body.email,
-                    password: '123'
-                });
-            expect(responseAuth.status).toBe(200);
-            expect(responseAuth.body.accessToken).toBeDefined();
-    }catch(e){
+
+        let responseAuth = await request(address)
+            .post('/users/authenticate')
+            .send({
+                email: responsePost.body.email,
+                password: '123'
+            });
+        expect(responseAuth.status).toBe(200);
+        expect(responseAuth.body.accessToken).toBeDefined();
+    } catch (e) {
         fail(e);
     }
 });
 
 test('authenticate - INVALID', async () => {
-    try{
+    try {
         let responsePost = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserAuthenticateInvalid',
                 email: 'users_authenticate_invalid@gmail.com',
                 password: '123'
             });
-        
-            let responseAuth = await request(address)
-                .post('/users/authenticate')
-                .send({
-                    email: responsePost.body.email,
-                    password: '1234'
-                });
-    }catch(e){
+
+        let responseAuth = await request(address)
+            .post('/users/authenticate')
+            .send({
+                email: responsePost.body.email,
+                password: '1234'
+            });
+    } catch (e) {
         expect(e.status).toBe(403);
     }
 })
@@ -55,7 +55,7 @@ test('get /users', async () => {
     try {
         let response = await request(address)
             .get('/users')
-            .set('Authorization', auth);
+            .set('authorization', auth);
         expect(response.status).toBe(200);
         expect(response.body.items).toBeInstanceOf(Array);
     } catch (e) {
@@ -67,7 +67,7 @@ test('get /users/xxx - NOT FOUND', async () => {
     try {
         return await request(address)
             .get('/users/xxx')
-            .set('Authorization', auth);;
+            .set('authorization', auth);;
     } catch (e) {
         expect(e.status).toBe(404);
     }
@@ -77,7 +77,7 @@ test('post /users', async () => {
     try {
         let response = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserPost',
                 email: 'users_post@gmail.com',
@@ -98,7 +98,7 @@ test('post /user - INCOMPLETE', async () => {
     try {
         let response = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 email: 'users_post_incomplete@gmail.com',
                 password: '123'
@@ -112,7 +112,7 @@ test('post /user - DUPLICATE', async () => {
     try {
         let response1 = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserDuplicate',
                 email: 'users_post_duplicate@gmail.com',
@@ -122,7 +122,7 @@ test('post /user - DUPLICATE', async () => {
 
         let response2 = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserDuplicate',
                 email: 'users_post_duplicate@gmail.com',
@@ -139,7 +139,7 @@ test('post /user/authenticate', async () => {
         const password = '123';
         let userResponse = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserToken',
                 email: 'usertoken@gmail.com',
@@ -148,7 +148,7 @@ test('post /user/authenticate', async () => {
 
         let tokenResponse = await request(address)
             .post('/users/authenticate')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 email: userResponse.body.email,
                 password: password
@@ -164,7 +164,7 @@ test('post /user/authenticate - WRONG', async () => {
     try {
         let userResponse = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserTokenWrong',
                 email: 'usertokenwrong@gmail.com',
@@ -173,7 +173,7 @@ test('post /user/authenticate - WRONG', async () => {
 
         let tokenResponse = await request(address)
             .post('/users/authenticate')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 email: userResponse.body.email,
                 password: '321'
@@ -187,7 +187,7 @@ test('patch /users/:id', async () => {
     try {
         let postResponse = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserPatch',
                 email: 'users_patch@gmail.com',
@@ -196,7 +196,7 @@ test('patch /users/:id', async () => {
 
         let patchResponse = await request(address)
             .patch(`/users/${postResponse.body._id}`)
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserPatch - After'
             });
@@ -213,7 +213,9 @@ test('patch /users/:id', async () => {
 
 test('patch /users/xxx - NOT FOUND', async () => {
     try {
-        return await request(address).patch('/users/xxx').set('Authorization', auth);
+        return await request(address)
+            .patch('/users/xxx')
+            .set('authorization', auth);
     } catch (e) {
         expect(e.status).toBe(404);
     }
@@ -223,7 +225,7 @@ test('delete /users/:id', async () => {
     try {
         let postResponse = await request(address)
             .post('/users')
-            .set('Authorization', auth)
+            .set('authorization', auth)
             .send({
                 name: 'UserDelete',
                 email: 'users_delete@gmail.com',
@@ -232,7 +234,7 @@ test('delete /users/:id', async () => {
 
         let deleteResponse = await request(address)
             .delete(`/users/${postResponse.body._id}`)
-            .set('Authorization', auth);
+            .set('authorization', auth);
 
         expect(deleteResponse.status).toBe(200);
     } catch (e) {
@@ -244,7 +246,7 @@ test('delete /users/xxx - NOT FOUND', async () => {
     try {
         return await request(address)
             .delete('/users/xxx')
-            .set('Authorization', auth);
+            .set('authorization', auth);
     } catch (e) {
         expect(e.status).toBe(404);
     }

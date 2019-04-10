@@ -9,10 +9,11 @@ let server: Server;
 
 const beforeTests = async () => {
     try {
-        environment.db.url = process.env.DB_URL || 'mongodb://localhost:27017/meat-api-test';
+        environment.db.url = process.env.DB_URL || 'mongodb://localhost:27017/food-api-test';
         environment.server.port = process.env.SERVER_PORT || 3001;
         server = new Server();
         await server.bootstrap();
+        
         await User.deleteMany({}).exec();
         Review.deleteMany({}).exec();
         Restaurant.deleteMany({}).exec();
@@ -38,4 +39,7 @@ const createAdmin = () => {
 beforeTests()
     .then(() => jestcli.run())
     .then(() => afterTests())
-    .catch(console.error);
+    .catch(error => {
+        console.error;
+        process.exit(1);
+    });

@@ -22,10 +22,12 @@ export class Server {
                 this.app.use(bodyParser.json());
                 this.app.use(tokenParser);
 
+                // registra logs padrões para as requisições
                 this.app.use(defaultLogger);
                 this.app.use(errorLogger);
                 
-                registerRoutes(this.app); // registra as rotas e os errorHandlers
+                // registra as rotas e os errorHandlers
+                registerRoutes(this.app); 
 
                 this.connection = this.app.listen(environment.server.port, () => {
                     resolve();

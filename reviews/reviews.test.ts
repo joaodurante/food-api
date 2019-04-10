@@ -1,7 +1,9 @@
 import 'jest';
 import * as request from 'supertest';
-let address = (<any>global)._address;
-let auth = (<any>global)._auth;
+import { environment } from '../common/environment';
+
+const address = environment.jest._address;
+const auth = environment.jest._auth;
 
 test('get /reviews', async () => {
     try {

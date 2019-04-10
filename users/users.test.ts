@@ -1,9 +1,9 @@
 import 'jest';
 import * as request from 'supertest';
-import { response } from 'express';
+import { environment } from '../common/environment';
 
-const address = (<any>global)._address;
-const auth = (<any>global)._auth;
+const address = environment.jest._address;
+const auth = environment.jest._auth;
 
 test('authenticate', async () => {
     try {

@@ -29,7 +29,6 @@ test('get /reviews/xxx - NOT FOUND', async () => {
 
 test('post /reviews', async () => {
     try {
-        let date: Date = new Date();
         let user = await request(address)
             .post('/users')
             .set('Authorization', auth)
@@ -46,6 +45,7 @@ test('post /reviews', async () => {
                 name: 'RestaurantReview'
             });
 
+        let date: Date = new Date();
         let response = await request(address)
             .post('/reviews')
             .set('Authorization', auth)

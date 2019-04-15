@@ -1,6 +1,4 @@
 restify
-tsconfig.json
 nodemon.json
 node_modules
-jest.config.js
 ecosystem.config.js
